@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.IO;
 
 namespace RobotCleaner
 {
@@ -22,13 +21,18 @@ namespace RobotCleaner
 
             var initialTileCoordinates = _reader.ReadLine();
 
+            if (expectedInstructions >= MaxInstructions)
+            {
+                return false;
+            }
+
             var instructions = new List<Instruction>();
 
             for (int i = 1; i <= expectedInstructions; i++)
             {
                 var str = _reader.ReadLine();
 
-                if (Instruction.TryParse(str, out var instruction))
+                if (Instruction.TryParse(str, out var instruction) && instruction.Distance < MaxDistance)
                 {
                     instructions.Add(instruction);
                 }
@@ -47,6 +51,8 @@ namespace RobotCleaner
         public static int MinY = -100_000;
         public static int MaxX = 100_000;
         public static int MaxY = 100_000;
+        public static int MaxInstructions = 10_000;
+        public static int MaxDistance = 100_000;
     }
 
     public interface IConsoleReader

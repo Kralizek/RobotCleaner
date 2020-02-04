@@ -121,5 +121,32 @@ namespace Tests
 
             Assert.That(output!.Instructions, Has.None.InstanceOf<Instruction>());
         }
+
+        [Test, MyInlineAutoData]
+        public void TryReadInputs_ignores_instructions_with_distance_greater_than_max_allowed([Frozen] IConsoleReader reader, InputReader sut, [Range(-100, 100)] int initialX, [Range(-100, 100)] int initialY, Direction direction, int distance)
+        {
+            Mock.Get(reader).SetupSequence(p => p.ReadLine())
+                .Returns("1")
+                .Returns($"{initialX} {initialY}")
+                .Returns($"{direction.ToString()[0]} {distance + InputReader.MaxDistance}");
+
+            var result = sut.TryReadInputs(out var output);
+
+            Assert.That(result, Is.True);
+
+            Assert.That(output!.Instructions, Has.None.InstanceOf<Instruction>());
+        }
+
+        [Test, MyInlineAutoData]
+        public void TryReadInputs_returns_false_if_GTE_max_number_of_allowed_instructions_is_entered([Frozen] IConsoleReader reader, InputReader sut, [Range(-100, 100)] int initialX, [Range(-100, 100)] int initialY)
+        {
+            Mock.Get(reader).SetupSequence(p => p.ReadLine())
+                            .Returns($"{InputReader.MaxInstructions}")
+                            .Returns($"{initialX} {initialY}");
+
+            var result = sut.TryReadInputs(out var output);
+
+            Assert.That(result, Is.False);
+        }
     }
 }
