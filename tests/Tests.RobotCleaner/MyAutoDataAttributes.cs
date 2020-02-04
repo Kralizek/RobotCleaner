@@ -18,8 +18,6 @@ namespace Tests
                 GenerateDelegates = true 
             });
 
-            fixture.Customize<OfficeRoom>(o => o.FromFactory((int x, int y) => new OfficeRoom(-x, x, -y, y)));
-
             return fixture;
         }
     }

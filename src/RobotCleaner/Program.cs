@@ -6,18 +6,39 @@ namespace RobotCleaner
     {
         static void Main(string[] args)
         {
-            var room = new OfficeRoom(-100_000, 100_000, -100_000, 100_000);
+            var reader = new ConsoleReader();
 
-            var initialTile = new Tile(10, 22);
+            var inputReader = new InputReader(reader);
 
-            var robot = room.CreateRobot(initialTile);
+            int result = 0;
 
-            robot.Move(Direction.East, 2);
-            robot.Move(Direction.North, 1);
+            if (inputReader.TryReadInputs(out var inputs))
+            {
+                result = CleanRoom(inputs);
+            }
 
-            var summary = robot.GetSummary();
+            Console.WriteLine($"=> Cleaned: {result}");
+        }
 
-            Console.WriteLine($"=> Cleaned: {summary.CleanedTiles}");
+        private static int CleanRoom(Inputs? inputs)
+        {
+            if (inputs != null)
+            {
+                var room = new OfficeRoom();
+
+                var robot = new Robot(room, inputs.InitialTile);
+
+                foreach (var instruction in inputs.Instructions)
+                {
+                    robot.Move(instruction.Direction, instruction.Distance);
+                }
+
+                var summary = robot.GetSummary();
+
+                return summary.CleanedTiles;
+            }
+
+            return 0;
         }
     }
 }

@@ -36,7 +36,7 @@ namespace Tests
         {
             var summary = sut.GetSummary();
 
-            Assert.That(summary.CleanedTiles, Is.EqualTo(room.CleanedTiles));
+            Assert.That(summary.CleanedTiles, Is.EqualTo(room.CleanedTiles.Count));
         }
     }
 }

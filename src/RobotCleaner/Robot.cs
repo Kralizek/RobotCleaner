@@ -30,7 +30,7 @@ namespace RobotCleaner
 
         public Summary GetSummary()
         {
-            return new Summary(_room.CleanedTiles);
+            return new Summary(_room.CleanedTiles.Count);
         }
     }
 }
